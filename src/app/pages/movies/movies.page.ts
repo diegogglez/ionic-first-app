@@ -1,7 +1,7 @@
 import { environment } from './../../../environments/environment';
 import { MovieService } from './../../services/movie.service';
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-movies',
@@ -20,7 +20,7 @@ export class MoviesPage implements OnInit {
     this.loadMovies();
   }
 
-  async loadMovies() {
+  async loadMovies(event?: any) {
 
     const loading = await this.loadingCtrl.create({
       message: 'loading..',
@@ -32,7 +32,14 @@ export class MoviesPage implements OnInit {
       loading.dismiss();
       this.movies = [...this.movies, ...res.results];
       console.log(res);
+
+      event?.target.complete();
     });
+  }
+
+  loadMore(event: any) {
+    this.currentPage++;
+    this.loadMovies(event);
   }
 
 }
