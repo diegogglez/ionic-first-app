@@ -20,8 +20,11 @@ export class MovieDetailsPage implements OnInit {
     this.movieService.getMovieDetails(id).subscribe(res => {
       console.log(res);
       this.movie = res;
-    })
-    
+    });
+  }
+
+  openHomepage() {
+    window.open(this.movie.homepage)
   }
 
 }
