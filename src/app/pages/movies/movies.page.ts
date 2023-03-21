@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { MovieService } from './../../services/movie.service';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
@@ -11,13 +12,12 @@ export class MoviesPage implements OnInit {
 
   movies: any[] = [];
   currentPage = 1;
+  imageBaseUrl = environment.images;
 
   constructor(private movieService: MovieService, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
-    this.movieService.getTopRatedMovies().subscribe(res => {
-      console.log(res);
-    })
+    this.loadMovies();
   }
 
   async loadMovies() {
@@ -25,13 +25,14 @@ export class MoviesPage implements OnInit {
     const loading = await this.loadingCtrl.create({
       message: 'loading..',
       spinner: 'bubbles'
-    })
+    });
+    await loading.present();
 
     this.movieService.getTopRatedMovies(this.currentPage).subscribe((res) => {
       loading.dismiss();
       this.movies = [...this.movies, ...res.results];
       console.log(res);
-    })
+    });
   }
 
 }
